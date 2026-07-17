@@ -1,0 +1,24 @@
+MILLY OP JE WEBSITE ZETTEN
+
+1. Pak dit ZIP-bestand uit.
+2. Open de uitgepakte map "boeken".
+3. Kopieer de map "milly" naar jouw eigen projectmap:
+   Documents > GitHub > boekenvanangelamarley > boeken
+
+Daarna hoort dit pad te bestaan:
+boekenvanangelamarley\boeken\milly\index.html
+
+4. Open de hoofd-index.html van jouw website.
+5. Zoek bij Milly naar deze oude knop:
+   <button class="button disabled" disabled>E-book volgt</button>
+
+6. Vervang die knop door:
+   <a class="button primary" href="boeken/milly/index.html">Open het boek</a>
+
+7. Sla index.html op met Ctrl+S.
+8. Open GitHub Desktop.
+9. Vul als Summary in: Milly online lezen
+10. Klik op Commit to main en daarna op Push origin.
+
+De directe link wordt:
+https://angelamarley.github.io/boekenvanangelamarley/boeken/milly/

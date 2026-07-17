@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4e8ee">
+  <title>Milly en de Magische Stem | Angela Marley</title>
+  <meta name="description" content="Lees Milly en de Magische Stem gratis online, geschreven door Angela Marley.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="reader-header">
+    <a class="back-link" href="../../index.html#boeken" aria-label="Terug naar alle boeken">← Terug naar de boeken</a>
+    <div>
+      <p class="eyebrow">Een kinderboek van Angela Marley</p>
+      <h1>Milly en de Magische Stem</h1>
+    </div>
+    <button class="fullscreen-button" id="fullscreenButton" type="button">Volledig scherm</button>
+  </header>
+
+  <main class="reader-shell">
+    <section class="book-stage" aria-label="Online boeklezer">
+      <button class="nav-button prev" id="prevButton" type="button" aria-label="Vorige pagina">‹</button>
+
+      <div class="book" id="book">
+        <div class="page-slot single" id="singleSlot">
+          <img id="singlePage" src="pages/pagina-01.jpg" alt="Pagina 1 van Milly en de Magische Stem">
+        </div>
+
+        <div class="spread" id="spread" hidden>
+          <div class="page-slot left">
+            <img id="leftPage" src="" alt="">
+          </div>
+          <div class="page-slot right">
+            <img id="rightPage" src="" alt="">
+          </div>
+        </div>
+      </div>
+
+      <button class="nav-button next" id="nextButton" type="button" aria-label="Volgende pagina">›</button>
+    </section>
+
+    <section class="reader-controls" aria-label="Bediening boek">
+      <button id="prevButtonBottom" type="button">← Vorige</button>
+      <p><strong id="pageLabel">Pagina 1 van 38</strong></p>
+      <button id="nextButtonBottom" type="button">Volgende →</button>
+    </section>
+
+    <div class="page-jump">
+      <label for="pageSelect">Ga naar pagina</label>
+      <select id="pageSelect" aria-label="Kies een pagina"></select>
+    </div>
+
+    <p class="reader-tip">Tip: gebruik ook de pijltjestoetsen op je toetsenbord of veeg op je telefoon.</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
