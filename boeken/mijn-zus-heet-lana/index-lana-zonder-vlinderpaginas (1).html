@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mijn zus heet Lana | Online lezen</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #fde9ef 0%, #f4f7ed 100%);
+      color: #4f3b43;
+      padding: 18px;
+    }
+    .reader {
+      width: min(100%, 720px);
+      margin: 0 auto;
+      text-align: center;
+    }
+    h1 {
+      margin: 0 0 14px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.45rem, 4vw, 2.15rem);
+      font-weight: 500;
+    }
+    .book {
+      position: relative;
+      width: min(100%, 540px);
+      aspect-ratio: 210 / 297;
+      margin: 0 auto;
+      perspective: 1800px;
+    }
+    .page-shell {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 18px 45px rgba(91, 58, 67, .28);
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+    .page-shell.turn-next {
+      animation: turnNext .55s ease-in-out;
+      transform-origin: left center;
+    }
+    .page-shell.turn-prev {
+      animation: turnPrev .55s ease-in-out;
+      transform-origin: right center;
+    }
+    @keyframes turnNext {
+      0% { transform: rotateY(0deg); }
+      48% { transform: rotateY(-82deg); }
+      52% { transform: rotateY(-82deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    @keyframes turnPrev {
+      0% { transform: rotateY(0deg); }
+      48% { transform: rotateY(82deg); }
+      52% { transform: rotateY(82deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    #pageImage {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      background: #fff;
+    }
+    .page-number {
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
+      min-width: 38px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 4px 14px rgba(0,0,0,.12);
+      font-weight: 700;
+      font-size: .9rem;
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+      margin-top: 18px;
+    }
+    button, .back-link {
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 18px;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    button:first-child { background: #7f9a87; color: white; }
+    button:last-child { background: #d96f8c; color: white; }
+    button:disabled { opacity: .42; cursor: not-allowed; }
+    #counter { font-weight: 700; white-space: nowrap; }
+    .help { margin: 14px 0 0; font-size: .95rem; opacity: .78; }
+    .back-link {
+      display: inline-block;
+      margin-top: 16px;
+      background: rgba(255,255,255,.72);
+      color: #59434b;
+    }
+    @media (max-width: 560px) {
+      body { padding: 10px; }
+      .controls { grid-template-columns: 1fr 1fr; }
+      #counter { grid-column: 1 / -1; grid-row: 1; }
+      button { padding: 13px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .page-shell.turn-next, .page-shell.turn-prev { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="reader">
+    <h1>Mijn zus heet Lana</h1>
+
+    <section class="book" aria-label="Online bladerboek">
+      <div class="page-shell" id="pageShell">
+        <img id="pageImage" src="page-01.jpg" alt="Bladzijde 1 van Mijn zus heet Lana">
+        <span class="page-number" id="pageNumber">1</span>
+      </div>
+    </section>
+
+    <nav class="controls" aria-label="Bladzijdebediening">
+      <button id="previousButton" type="button">← Vorige bladzijde</button>
+      <span id="counter">1 / 15</span>
+      <button id="nextButton" type="button">Volgende bladzijde →</button>
+    </nav>
+
+    <p class="help">Klik op de knoppen, gebruik de pijltjestoetsen of veeg op je telefoon.</p>
+    <a class="back-link" href="../../index.html#boeken">← Terug naar mijn boeken</a>
+  </main>
+
+  <script>
+    const pages = [
+      "page-01.jpg",
+      "page-02.jpg",
+      "page-04.jpg",
+      "page-06.jpg",
+      "page-08.jpg",
+      "page-10.jpg",
+      "page-12.jpg",
+      "page-14.jpg",
+      "page-16.jpg",
+      "page-18.jpg",
+      "page-20.jpg",
+      "page-22.jpg",
+      "page-24.jpg",
+      "page-26.jpg",
+      "page-28.jpg"
+    ];
+
+    const pageImage = document.getElementById("pageImage");
+    const pageShell = document.getElementById("pageShell");
+    const pageNumber = document.getElementById("pageNumber");
+    const counter = document.getElementById("counter");
+    const previousButton = document.getElementById("previousButton");
+    const nextButton = document.getElementById("nextButton");
+
+    let currentIndex = 0;
+    let isTurning = false;
+    let touchStartX = null;
+
+    function updateControls() {
+      pageNumber.textContent = String(currentIndex + 1);
+      counter.textContent = `${currentIndex + 1} / ${pages.length}`;
+      previousButton.disabled = currentIndex === 0;
+      nextButton.disabled = currentIndex === pages.length - 1;
+    }
+
+    function showPage(newIndex, direction) {
+      if (isTurning || newIndex < 0 || newIndex >= pages.length || newIndex === currentIndex) return;
+      isTurning = true;
+
+      const animationClass = direction === "previous" ? "turn-prev" : "turn-next";
+      pageShell.classList.add(animationClass);
+
+      window.setTimeout(() => {
+        currentIndex = newIndex;
+        pageImage.src = pages[currentIndex];
+        pageImage.alt = `Bladzijde ${currentIndex + 1} van Mijn zus heet Lana`;
+        updateControls();
+      }, 275);
+
+      window.setTimeout(() => {
+        pageShell.classList.remove(animationClass);
+        isTurning = false;
+      }, 560);
+    }
+
+    previousButton.addEventListener("click", () => showPage(currentIndex - 1, "previous"));
+    nextButton.addEventListener("click", () => showPage(currentIndex + 1, "next"));
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "ArrowLeft") showPage(currentIndex - 1, "previous");
+      if (event.key === "ArrowRight") showPage(currentIndex + 1, "next");
+    });
+
+    pageShell.addEventListener("touchstart", event => {
+      touchStartX = event.changedTouches[0].clientX;
+    }, { passive: true });
+
+    pageShell.addEventListener("touchend", event => {
+      if (touchStartX === null) return;
+      const distance = event.changedTouches[0].clientX - touchStartX;
+      if (distance > 45) showPage(currentIndex - 1, "previous");
+      if (distance < -45) showPage(currentIndex + 1, "next");
+      touchStartX = null;
+    }, { passive: true });
+
+    updateControls();
+  </script>
+</body>
+</html>
