@@ -1,59 +1,115 @@
 <!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4e8ee">
-  <title>Milly en de Magische Stem | Angela Marley</title>
-  <meta name="description" content="Lees Milly en de Magische Stem gratis online, geschreven door Angela Marley.">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Milly en de Magische Stem | Online lezen</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#f5ead7,#f7f0dc 52%,#efe4cf);color:#49382d;padding:18px}
+.reader{width:min(100%,760px);margin:0 auto;text-align:center}
+h1{margin:0 0 14px;font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.45rem,4vw,2.15rem);font-weight:500}
+.book{position:relative;width:min(100%,540px);aspect-ratio:210/297;margin:0 auto;perspective:1800px}
+.page-shell{position:absolute;inset:0;border-radius:18px;background:#fff;box-shadow:0 18px 45px rgba(74,50,32,.28);overflow:hidden;transform-style:preserve-3d}
+.page-shell.turn-next{animation:turnNext .55s ease-in-out;transform-origin:left center}
+.page-shell.turn-prev{animation:turnPrev .55s ease-in-out;transform-origin:right center}
+@keyframes turnNext{0%{transform:rotateY(0)}48%{transform:rotateY(-82deg)}52%{transform:rotateY(-82deg)}100%{transform:rotateY(0)}}
+@keyframes turnPrev{0%{transform:rotateY(0)}48%{transform:rotateY(82deg)}52%{transform:rotateY(82deg)}100%{transform:rotateY(0)}}
+#pageImage{width:100%;height:100%;display:block;object-fit:contain;background:#fff}
+.page-number{position:absolute;right:14px;bottom:12px;min-width:38px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 4px 14px rgba(0,0,0,.12);font-weight:700;font-size:.9rem}
+.controls{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-top:18px}
+button,.back-link{border:0;border-radius:999px;padding:14px 18px;font:inherit;font-weight:700;text-decoration:none;cursor:pointer}
+button:first-child{background:#7f9a87;color:#fff}button:last-child{background:#b56d46;color:#fff}
+button:disabled{opacity:.42;cursor:not-allowed}#counter{font-weight:700;white-space:nowrap}
+.help{margin:14px 0 0;font-size:.95rem;opacity:.78}
+.back-link{display:inline-block;margin-top:16px;background:rgba(255,255,255,.72);color:#49382d}
+@media(max-width:560px){body{padding:10px}.controls{grid-template-columns:1fr 1fr}#counter{grid-column:1/-1;grid-row:1}button{padding:13px 10px}}
+</style>
 </head>
 <body>
-  <header class="reader-header">
-    <a class="back-link" href="../../index.html#boeken" aria-label="Terug naar alle boeken">← Terug naar de boeken</a>
-    <div>
-      <p class="eyebrow">Een kinderboek van Angela Marley</p>
-      <h1>Milly en de Magische Stem</h1>
-    </div>
-    <button class="fullscreen-button" id="fullscreenButton" type="button">Volledig scherm</button>
-  </header>
-
-  <main class="reader-shell">
-    <section class="book-stage" aria-label="Online boeklezer">
-      <button class="nav-button prev" id="prevButton" type="button" aria-label="Vorige pagina">‹</button>
-
-      <div class="book" id="book">
-        <div class="page-slot single" id="singleSlot">
-          <img id="singlePage" src="pages/pagina-01.jpg" alt="Pagina 1 van Milly en de Magische Stem">
-        </div>
-
-        <div class="spread" id="spread" hidden>
-          <div class="page-slot left">
-            <img id="leftPage" src="" alt="">
-          </div>
-          <div class="page-slot right">
-            <img id="rightPage" src="" alt="">
-          </div>
-        </div>
-      </div>
-
-      <button class="nav-button next" id="nextButton" type="button" aria-label="Volgende pagina">›</button>
-    </section>
-
-    <section class="reader-controls" aria-label="Bediening boek">
-      <button id="prevButtonBottom" type="button">← Vorige</button>
-      <p><strong id="pageLabel">Pagina 1 van 38</strong></p>
-      <button id="nextButtonBottom" type="button">Volgende →</button>
-    </section>
-
-    <div class="page-jump">
-      <label for="pageSelect">Ga naar pagina</label>
-      <select id="pageSelect" aria-label="Kies een pagina"></select>
-    </div>
-
-    <p class="reader-tip">Tip: gebruik ook de pijltjestoetsen op je toetsenbord of veeg op je telefoon.</p>
-  </main>
-
-  <script src="script.js"></script>
+<main class="reader">
+<h1>Milly en de Magische Stem</h1>
+<section class="book" aria-label="Online bladerboek">
+<div class="page-shell" id="pageShell">
+<img id="pageImage" src="pages/pagina-01.jpg" alt="Bladzijde 1 van Milly en de Magische Stem">
+<span class="page-number" id="pageNumber">1</span>
+</div>
+</section>
+<nav class="controls" aria-label="Bladzijdebediening">
+<button id="previousButton" type="button">← Vorige bladzijde</button>
+<span id="counter">1 / 32</span>
+<button id="nextButton" type="button">Volgende bladzijde →</button>
+</nav>
+<p class="help">Klik op de knoppen, gebruik de pijltjestoetsen of veeg op je telefoon.</p>
+<a class="back-link" href="../../index.html#boeken">← Terug naar mijn boeken</a>
+</main>
+<script>
+const pages=[
+      "pages/pagina-01.jpg",
+      "pages/pagina-02.jpg",
+      "pages/pagina-04.jpg",
+      "pages/pagina-05.jpg",
+      "pages/pagina-06.jpg",
+      "pages/pagina-07.jpg",
+      "pages/pagina-08.jpg",
+      "pages/pagina-10.jpg",
+      "pages/pagina-11.jpg",
+      "pages/pagina-12.jpg",
+      "pages/pagina-13.jpg",
+      "pages/pagina-14.jpg",
+      "pages/pagina-16.jpg",
+      "pages/pagina-17.jpg",
+      "pages/pagina-18.jpg",
+      "pages/pagina-19.jpg",
+      "pages/pagina-20.jpg",
+      "pages/pagina-22.jpg",
+      "pages/pagina-23.jpg",
+      "pages/pagina-24.jpg",
+      "pages/pagina-26.jpg",
+      "pages/pagina-27.jpg",
+      "pages/pagina-28.jpg",
+      "pages/pagina-29.jpg",
+      "pages/pagina-30.jpg",
+      "pages/pagina-32.jpg",
+      "pages/pagina-33.jpg",
+      "pages/pagina-34.jpg",
+      "pages/pagina-35.jpg",
+      "pages/pagina-36.jpg",
+      "pages/pagina-37.jpg",
+      "pages/pagina-38.jpg"
+];
+const pageImage=document.getElementById("pageImage");
+const pageShell=document.getElementById("pageShell");
+const pageNumber=document.getElementById("pageNumber");
+const counter=document.getElementById("counter");
+const previousButton=document.getElementById("previousButton");
+const nextButton=document.getElementById("nextButton");
+let currentIndex=0,isTurning=false,touchStartX=null;
+function updateControls(){
+pageNumber.textContent=String(currentIndex+1);
+counter.textContent=`${currentIndex+1} / ${pages.length}`;
+previousButton.disabled=currentIndex===0;
+nextButton.disabled=currentIndex===pages.length-1;
+}
+function showPage(newIndex,direction){
+if(isTurning||newIndex<0||newIndex>=pages.length||newIndex===currentIndex)return;
+isTurning=true;
+const animationClass=direction==="previous"?"turn-prev":"turn-next";
+pageShell.classList.add(animationClass);
+setTimeout(()=>{
+currentIndex=newIndex;
+pageImage.src=pages[currentIndex];
+pageImage.alt=`Bladzijde ${currentIndex+1} van Milly en de Magische Stem`;
+updateControls();
+},275);
+setTimeout(()=>{pageShell.classList.remove(animationClass);isTurning=false},560);
+}
+previousButton.addEventListener("click",()=>showPage(currentIndex-1,"previous"));
+nextButton.addEventListener("click",()=>showPage(currentIndex+1,"next"));
+document.addEventListener("keydown",e=>{if(e.key==="ArrowLeft")showPage(currentIndex-1,"previous");if(e.key==="ArrowRight")showPage(currentIndex+1,"next")});
+pageShell.addEventListener("touchstart",e=>{touchStartX=e.changedTouches[0].clientX},{passive:true});
+pageShell.addEventListener("touchend",e=>{if(touchStartX===null)return;const d=e.changedTouches[0].clientX-touchStartX;if(d>45)showPage(currentIndex-1,"previous");if(d<-45)showPage(currentIndex+1,"next");touchStartX=null},{passive:true});
+updateControls();
+</script>
 </body>
 </html>
