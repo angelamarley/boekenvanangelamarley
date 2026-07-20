@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rosie's Lied | Online lezen</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow:hidden}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(135deg,#f5ead7,#efe4cf);
+  color:#49382d;
+}
+.reader{
+  height:100svh;
+  width:min(100%,760px);
+  margin:0 auto;
+  padding:10px 14px 8px;
+  display:flex;
+  flex-direction:column;
+  text-align:center;
+}
+h1{
+  margin:0 0 8px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(1.25rem,3.2vw,1.9rem);
+  font-weight:500;
+  line-height:1.1;
+  flex:0 0 auto;
+}
+.book-area{
+  flex:1 1 auto;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.book{
+  position:relative;
+  height:100%;
+  max-height:100%;
+  aspect-ratio:210/297;
+  max-width:100%;
+  perspective:1800px;
+}
+.page-shell{
+  position:absolute;
+  inset:0;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 14px 35px rgba(74,50,32,.25);
+  overflow:hidden;
+  transform-style:preserve-3d;
+}
+.page-shell.turn-next{animation:turnNext .55s ease-in-out;transform-origin:left center}
+.page-shell.turn-prev{animation:turnPrev .55s ease-in-out;transform-origin:right center}
+@keyframes turnNext{0%{transform:rotateY(0)}48%{transform:rotateY(-82deg)}52%{transform:rotateY(-82deg)}100%{transform:rotateY(0)}}
+@keyframes turnPrev{0%{transform:rotateY(0)}48%{transform:rotateY(82deg)}52%{transform:rotateY(82deg)}100%{transform:rotateY(0)}}
+#pageImage{width:100%;height:100%;display:block;object-fit:contain;background:#fff}
+.page-number{
+  position:absolute;right:10px;bottom:9px;min-width:34px;padding:6px 9px;
+  border-radius:999px;background:rgba(255,255,255,.92);
+  box-shadow:0 3px 10px rgba(0,0,0,.12);font-weight:700;font-size:.82rem;
+}
+.controls{
+  flex:0 0 auto;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:12px;
+  align-items:center;
+  margin-top:9px;
+}
+button,.back-link{
+  border:0;border-radius:999px;padding:11px 14px;
+  font:inherit;font-weight:700;text-decoration:none;cursor:pointer;
+}
+button:first-child{background:#7f9a87;color:#fff}
+button:last-child{background:#c85f86;color:#fff}
+button:disabled{opacity:.42;cursor:not-allowed}
+#counter{font-weight:700;white-space:nowrap}
+.footer-line{
+  flex:0 0 auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  margin-top:6px;
+  font-size:.82rem;
+}
+.help{margin:0;opacity:.72}
+.back-link{padding:7px 11px;background:rgba(255,255,255,.72);color:#49382d}
+@media(max-width:560px){
+  .reader{padding:7px 8px 6px}
+  h1{font-size:1.2rem;margin-bottom:5px}
+  .controls{grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+  #counter{grid-column:1/-1;grid-row:1}
+  button{padding:10px 8px;font-size:.9rem}
+  .footer-line{margin-top:4px}
+  .help{display:none}
+  .back-link{font-size:.8rem}
+}
+@media(max-height:650px){
+  h1{font-size:1.15rem}
+  .controls{margin-top:5px}
+  button{padding:9px 10px}
+  .footer-line{margin-top:3px}
+  .help{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .page-shell.turn-next,.page-shell.turn-prev{animation:none}
+}
+</style>
+</head>
+<body>
+<main class="reader">
+<h1>Rosie's Lied</h1>
+<div class="book-area">
+  <section class="book" aria-label="Online bladerboek">
+    <div class="page-shell" id="pageShell">
+      <img id="pageImage" src="pages/pagina-01.png" alt="Bladzijde 1 van Rosie's Lied">
+      <span class="page-number" id="pageNumber">1</span>
+    </div>
+  </section>
+</div>
+<nav class="controls" aria-label="Bladzijdebediening">
+  <button id="previousButton" type="button">← Vorige bladzijde</button>
+  <span id="counter">1 / 15</span>
+  <button id="nextButton" type="button">Volgende bladzijde →</button>
+</nav>
+<div class="footer-line">
+  <p class="help">Gebruik de knoppen, pijltjestoetsen of veeg op je telefoon.</p>
+  <a class="back-link" href="../../index.html#boeken">← Terug naar mijn boeken</a>
+</div>
+</main>
+<script>
+const pages=[
+  "pages/pagina-01.png",
+  "pages/pagina-02.png",
+  "pages/pagina-03.png",
+  "pages/pagina-04.png",
+  "pages/pagina-05.png",
+  "pages/pagina-06.png",
+  "pages/pagina-07.png",
+  "pages/pagina-08.png",
+  "pages/pagina-09.png",
+  "pages/pagina-10.png",
+  "pages/pagina-11.png",
+  "pages/pagina-12.png",
+  "pages/pagina-13.png",
+  "pages/pagina-14.png",
+  "pages/pagina-15.png"
+];
+
+const pageImage=document.getElementById("pageImage");
+const pageShell=document.getElementById("pageShell");
+const pageNumber=document.getElementById("pageNumber");
+const counter=document.getElementById("counter");
+const previousButton=document.getElementById("previousButton");
+const nextButton=document.getElementById("nextButton");
+let currentIndex=0,isTurning=false,touchStartX=null;
+function updateControls(){
+  pageNumber.textContent=String(currentIndex+1);
+  counter.textContent=`${currentIndex+1} / ${pages.length}`;
+  previousButton.disabled=currentIndex===0;
+  nextButton.disabled=currentIndex===pages.length-1;
+}
+function showPage(newIndex,direction){
+  if(isTurning||newIndex<0||newIndex>=pages.length||newIndex===currentIndex)return;
+  isTurning=true;
+  const animationClass=direction==="previous"?"turn-prev":"turn-next";
+  pageShell.classList.add(animationClass);
+  setTimeout(()=>{
+    currentIndex=newIndex;
+    pageImage.src=pages[currentIndex];
+    pageImage.alt=`Bladzijde ${currentIndex+1} van Rosie\'s Lied`;
+    updateControls();
+  },275);
+  setTimeout(()=>{pageShell.classList.remove(animationClass);isTurning=false},560);
+}
+previousButton.addEventListener("click",()=>showPage(currentIndex-1,"previous"));
+nextButton.addEventListener("click",()=>showPage(currentIndex+1,"next"));
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft")showPage(currentIndex-1,"previous");
+  if(e.key==="ArrowRight")showPage(currentIndex+1,"next");
+});
+pageShell.addEventListener("touchstart",e=>{touchStartX=e.changedTouches[0].clientX},{passive:true});
+pageShell.addEventListener("touchend",e=>{
+  if(touchStartX===null)return;
+  const d=e.changedTouches[0].clientX-touchStartX;
+  if(d>45)showPage(currentIndex-1,"previous");
+  if(d<-45)showPage(currentIndex+1,"next");
+  touchStartX=null;
+},{passive:true});
+updateControls();
+</script>
+</body>
+</html>
