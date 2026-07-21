@@ -65,3 +65,95 @@
 template-columns:1fr}.portrait-wrap{max-height:620px}}@media(max-width:680px){.section{padding:4rem 0}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.petal{display:none}}
 /* CONTACTPAGINA NIEUW */
 .contact.section{position:relative;overflow:hidden;padding:5rem 2rem;border-radius:2.5rem;background:linear-gradient(180deg,#fffaf2,#f9efdf);box-shadow:0 20px 50px rgba(85,56,55,.15)}.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2rem 0}.review-card{background:#fffdf8;border:1px solid rgba(184,138,66,.25);border-radius:1.6rem;padding:2rem;box-shadow:0 12px 28px rgba(85,56,55,.12)}.contact-divider{margin:4rem auto;border:0;height:1px;background:linear-gradient(90deg,transparent,#c96f83,transparent)}.fairytale-contact{display:grid;grid-template-columns:320px 1fr;gap:3rem}.mailbox-image{min-height:380px;display:flex;align-items:center;justify-content:center}.mailbox-image img{display:none}.mailbox-image:before{content:'📮';font-size:10rem}.contact-form{background:#fffdf8;border:1px solid rgba(184,138,66,.25);border-radius:2rem;padding:2rem}.contact-form label{display:block;margin:.8rem 0 .3rem;font-weight:bold}.contact-form input,.contact-form textarea{width:100%;padding:.9rem;border-radius:1rem;border:1px solid #d9c3ae;font:inherit}@media(max-width:900px){.review-grid{grid-template-columns:1fr}.fairytale-contact{grid-template-columns:1fr}}
+/* ===== CONTACTPAGINA MET ILLUSTRATIE ===== */
+
+.contact.section{
+    padding:0;
+    max-width:1100px;
+    margin:80px auto;
+    background:none;
+    box-shadow:none;
+}
+
+.contact-illustration{
+    position:relative;
+    width:100%;
+}
+
+.contact-illustration img{
+    width:100%;
+    display:block;
+    border-radius:28px;
+}
+
+/* Reactieknop */
+
+.reaction-button{
+    position:absolute;
+    left:50%;
+    top:47.5%;
+    transform:translateX(-50%);
+    width:320px;
+    height:58px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-decoration:none;
+    color:white;
+    font-size:24px;
+    font-weight:bold;
+
+    opacity:0;
+}
+
+/* Formulier */
+
+.overlay-form{
+    position:absolute;
+
+    left:43.5%;
+    top:71%;
+
+    width:44%;
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.overlay-form input,
+.overlay-form textarea{
+
+    background:transparent;
+    border:none;
+    outline:none;
+
+    font-size:22px;
+
+    padding:12px;
+}
+
+.overlay-form textarea{
+
+    grid-column:1 / 3;
+
+    height:170px;
+
+    resize:none;
+}
+
+.overlay-form button{
+
+    grid-column:1 / 3;
+
+    width:290px;
+    height:60px;
+
+    justify-self:center;
+
+    opacity:0;
+
+    cursor:pointer;
+}
